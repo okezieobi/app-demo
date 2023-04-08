@@ -9,8 +9,6 @@
       "outDir": "dist",
       "rootDir": "src",
       "sourceRoot": "src",
-      "sourceMap": true,
-      "mapRoot": "map",
       "allowJs": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true

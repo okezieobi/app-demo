@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "clean": "rm -rf dist",
     "release": "npm run build && npm run start",
-    "build": "npm run clean && npm run build:app && npm run migrate:up",
+    "build": "npm run clean && npm run build:app",
     "build:app": "npx tsc",
     "test": "jest",
     "test:single": "cross-env NODE_ENV=testing jest tests/**/*.spec.ts",
