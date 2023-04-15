@@ -2,6 +2,7 @@ import { Model, Table, Column, DataType, Default } from "sequelize-typescript";
 
 export interface UserAttributes {
   id: string;
+  email?: string;
   account_number?: number;
   bank_code?: number;
   account_name?: string;
@@ -33,6 +34,9 @@ export class Users
 
   @Column({ allowNull: true, type: DataType.STRING })
   account_name?: string;
+
+  @Column({ allowNull: true, unique: true, type: DataType.STRING })
+  email?: string;
 
   @Column({ allowNull: true, type: DataType.BOOLEAN })
   is_verIfied?: boolean;
