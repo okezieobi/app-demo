@@ -41,8 +41,11 @@ export class PayStackServices {
     return process.env.PAYSTACK_TEST_SECRET_KEY ?? "";
   }
 
-  async resolveAcctNo(account_number: string, bank_code: string) {
-    return axios<ResolvedAcctNo, ResolvedAcctNo>({
+  async resolveAcctNo(
+    account_number: string,
+    bank_code: string
+  ): Promise<ResolvedAcctNo> {
+    const { data } = await axios({
       method: "get",
       baseURL: this.baseUrl,
       url: `bank/resolve?account_number=${account_number}&bank_code=${bank_code}`,
@@ -50,15 +53,17 @@ export class PayStackServices {
         Authorization: `Bearer ${this.readSecret()}`,
       },
     });
+    return data;
   }
-  async listBanks() {
-    return axios<Bank, Bank>({
+  async listBanks(): Promise<Bank> {
+    const { data } = await axios({
       method: "get",
       baseURL: this.baseUrl,
-      url: `bank`,
+      url: "bank",
       headers: {
         Authorization: `Bearer ${this.readSecret()}`,
       },
     });
+    return data;
   }
 }
