@@ -1,10 +1,15 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import logger from "debug";
-import { GraphQLError, GraphQLTypeResolver } from "graphql";
+import { GraphQLError } from "graphql";
 
 import { UserFeatures } from "./features";
-import { initConnection } from "./services";
+import {
+  initConnection,
+  ValidateAcct,
+  ValidateUser,
+  InsertUser,
+} from "./services";
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -20,11 +25,13 @@ const typeDefs = `#graphql
 
   type Query {
     hello: String
+    getUser(bank_code: Int, account_number: Int): Object
   }
 
 
   type Mutation {
-     insertUser(email: String!): Object
+     insertUser(account_name: String!): Object
+     verifyUser(account_name: String, bank_code: Int, account_number: Int): Object
   }
 `;
 
@@ -33,11 +40,9 @@ const typeDefs = `#graphql
 const resolvers = {
   Query: {
     hello: () => "Hello world!",
-  },
-  Mutation: {
-    insertUser: async (val: unknown, ctx: { email: string }) => {
-      return new UserFeatures({ email: ctx.email })
-        .insertOne()
+    getUser: async ({ bank_code, account_number }: ValidateAcct) =>
+      new UserFeatures({ account_number })
+        .getAcct(bank_code)
         .catch((error: Error) => {
           throw new GraphQLError(error.message, {
             extensions: {
@@ -45,8 +50,32 @@ const resolvers = {
               originalError: error,
             },
           });
+        }),
+  },
+  Mutation: {
+    insertUser: async (val: unknown, ctx: InsertUser) =>
+      new UserFeatures(ctx).insertOne().catch((error: Error) => {
+        throw new GraphQLError(error.message, {
+          extensions: {
+            code: error.constructor.name ?? error.name,
+            originalError: error,
+          },
         });
-    },
+      }),
+    verifyUser: async (
+      val: unknown,
+      { account_name, account_number, bank_code }: ValidateUser
+    ) =>
+      new UserFeatures({ account_name, account_number })
+        .verifyAcct(bank_code)
+        .catch((error: Error) => {
+          throw new GraphQLError(error.message, {
+            extensions: {
+              code: error.constructor.name ?? error.name,
+              originalError: error,
+            },
+          });
+        }),
   },
 };
 

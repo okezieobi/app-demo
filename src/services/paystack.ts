@@ -1,7 +1,7 @@
 import axios from "axios";
 import { config } from "dotenv";
 
-interface ResolveAcctRes {
+interface ResolvedAcctRes {
   status: boolean;
   message: string;
   data: {
@@ -19,8 +19,8 @@ export class PayStackServices {
     return process.env.PAYSTACK_TEST_SECRET_KEY ?? "";
   }
 
-  async resolveAcctNo(account_number: string, bank_code: string) {
-    return axios<ResolveAcctRes, ResolveAcctRes>({
+  async resolveAcctNo(account_number: number, bank_code: number) {
+    return axios<ResolvedAcctRes, ResolvedAcctRes>({
       method: "get",
       baseURL: this.baseUrl,
       url: `/bank/resolve?account_number=${account_number}&bank_code=${bank_code}`,

@@ -36,7 +36,7 @@ export const initConnection = async () => {
   debug("Db connection successful");
 };
 
-export const QueryServices = {
+export const queryServices = {
   instanceExists<Instance>(instance: Instance) {
     return instance == null;
   },
