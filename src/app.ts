@@ -9,6 +9,7 @@ import {
   ValidateAcct,
   ValidateUser,
   InsertUser,
+  PayStackServices,
 } from "./services";
 
 // A schema is a collection of type definitions (hence "typeDefs")
@@ -25,6 +26,7 @@ const typeDefs = `#graphql
 
   type Query {
     hello: String
+    listBanks: Object
     getUser(bank_code: String, account_number: String): Object
   }
 
@@ -40,6 +42,15 @@ const typeDefs = `#graphql
 const resolvers = {
   Query: {
     hello: () => "Hello world!",
+    listBanks: async () =>
+      new PayStackServices().listBanks().catch((error: Error) => {
+        throw new GraphQLError(error.message, {
+          extensions: {
+            code: error.constructor.name ?? error.name,
+            originalError: error,
+          },
+        });
+      }),
     getUser: async (
       val: unknown,
       { bank_code, account_number }: ValidateAcct
