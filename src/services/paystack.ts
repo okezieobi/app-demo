@@ -5,7 +5,7 @@ interface ResolvedAcctRes {
   status: boolean;
   message: string;
   data: {
-    account_number: number;
+    account_number: string;
     account_name: string;
     bank_id: number;
   };
@@ -19,13 +19,13 @@ export class PayStackServices {
     return process.env.PAYSTACK_TEST_SECRET_KEY ?? "";
   }
 
-  async resolveAcctNo(account_number: number, bank_code: number) {
+  async resolveAcctNo(account_number: string, bank_code: string) {
     return axios<ResolvedAcctRes, ResolvedAcctRes>({
       method: "get",
       baseURL: this.baseUrl,
-      url: `/bank/resolve?account_number=${account_number}&bank_code=${bank_code}`,
+      url: `bank/resolve?account_number=${account_number}&bank_code=${bank_code}`,
       headers: {
-        Authorization: this.readSecret(),
+        Authorization: `Bearer ${this.readSecret()}`,
       },
     });
   }

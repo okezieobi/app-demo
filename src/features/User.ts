@@ -22,7 +22,7 @@ export class UserFeatures {
     });
   }
 
-  async verifyAcct(bank_code: number) {
+  async verifyAcct(bank_code: string) {
     const input = await ValidateUserSchema.parseAsync({
       account_name: this.params?.account_name,
       account_number: this.params?.account_number,
@@ -51,19 +51,19 @@ export class UserFeatures {
     }
   }
 
-  async getAcct(bank_code: number) {
+  async getAcct(bank_code: string) {
     const input = await ValidateAcctSchema.parseAsync({
       account_number: this.params?.account_number,
       bank_code,
     });
-    return sequelize.transaction(async () => {
-      return (
-        Users.findOne({ where: input }) ??
-        (await this.payStack.resolveAcctNo(
-          input.account_number,
-          input.bank_code
-        ))
-      );
-    });
+    const user =
+      (await sequelize.transaction(async () => {
+        return Users.findOne({ where: input });
+      })) ??
+      (await this.payStack.resolveAcctNo(
+        input.account_number,
+        input.bank_code
+      ));
+    return user;
   }
 }

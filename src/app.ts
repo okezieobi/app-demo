@@ -25,12 +25,12 @@ const typeDefs = `#graphql
 
   type Query {
     hello: String
-    getUser(bank_code: Int, account_number: Int): Object
+    getUser(bank_code: String, account_number: String): Object
   }
 
 
   type Mutation {
-     insertUser(account_name: String!): Object
+     insertUser(account_name: String): Object
      verifyUser(account_name: String, bank_code: Int, account_number: Int): Object
   }
 `;
@@ -40,7 +40,10 @@ const typeDefs = `#graphql
 const resolvers = {
   Query: {
     hello: () => "Hello world!",
-    getUser: async ({ bank_code, account_number }: ValidateAcct) =>
+    getUser: async (
+      val: unknown,
+      { bank_code, account_number }: ValidateAcct
+    ) =>
       new UserFeatures({ account_number })
         .getAcct(bank_code)
         .catch((error: Error) => {
