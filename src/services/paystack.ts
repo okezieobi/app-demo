@@ -1,7 +1,7 @@
 import axios from "axios";
 import { config } from "dotenv";
 
-interface ResolvedAcctRes {
+interface ResolvedAcctNo {
   status: boolean;
   message: string;
   data: {
@@ -20,7 +20,7 @@ export class PayStackServices {
   }
 
   async resolveAcctNo(account_number: string, bank_code: string) {
-    return axios<ResolvedAcctRes, ResolvedAcctRes>({
+    return axios<ResolvedAcctNo, ResolvedAcctNo>({
       method: "get",
       baseURL: this.baseUrl,
       url: `bank/resolve?account_number=${account_number}&bank_code=${bank_code}`,
