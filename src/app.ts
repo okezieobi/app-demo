@@ -37,59 +37,40 @@ const typeDefs = `#graphql
   }
 `;
 
+const errorHandler = (error: Error) => {
+  throw new GraphQLError(error.message, {
+    extensions: {
+      code: error.constructor.name ?? error.name,
+      originalError: error,
+    },
+  });
+};
+
 // Resolvers define how to fetch the types defined in your schema.
 // This resolver retrieves books from the "books" array above.
 const resolvers = {
   Query: {
     hello: () => "Hello world!",
     listBanks: async () =>
-      new PayStackServices().listBanks().catch((error: Error) => {
-        throw new GraphQLError(error.message, {
-          extensions: {
-            code: error.constructor.name ?? error.name,
-            originalError: error,
-          },
-        });
-      }),
+      new PayStackServices().listBanks().catch(errorHandler),
     getUser: async (
       val: unknown,
       { bank_code, account_number }: ValidateAcct
     ) =>
       new UserFeatures({ account_number })
         .getAcct(bank_code)
-        .catch((error: Error) => {
-          throw new GraphQLError(error.message, {
-            extensions: {
-              code: error.constructor.name ?? error.name,
-              originalError: error,
-            },
-          });
-        }),
+        .catch(errorHandler),
   },
   Mutation: {
     insertUser: async (val: unknown, ctx: InsertUser) =>
-      new UserFeatures(ctx).insertOne().catch((error: Error) => {
-        throw new GraphQLError(error.message, {
-          extensions: {
-            code: error.constructor.name ?? error.name,
-            originalError: error,
-          },
-        });
-      }),
+      new UserFeatures(ctx).insertOne().catch(errorHandler),
     verifyUser: async (
       val: unknown,
       { account_name, account_number, bank_code }: ValidateUser
     ) =>
       new UserFeatures({ account_name, account_number })
         .verifyAcct(bank_code)
-        .catch((error: Error) => {
-          throw new GraphQLError(error.message, {
-            extensions: {
-              code: error.constructor.name ?? error.name,
-              originalError: error,
-            },
-          });
-        }),
+        .catch(errorHandler),
   },
 };
 
