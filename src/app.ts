@@ -31,7 +31,7 @@ const typeDefs = `#graphql
 
   type Mutation {
      insertUser(account_name: String): Object
-     verifyUser(account_name: String, bank_code: Int, account_number: Int): Object
+     verifyUser(account_name: String, bank_code: String, account_number: String): Object
   }
 `;
 
