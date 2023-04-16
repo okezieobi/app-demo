@@ -1,7 +1,7 @@
 import { Model, Table, Column, DataType, Default } from "sequelize-typescript";
 
 export interface UserAttributes {
-  id: string;
+  id?: string;
   email?: string;
   account_number?: number;
   bank_code?: number;
@@ -18,7 +18,7 @@ export class Users
 {
   @Default(DataType.UUIDV4)
   @Column({ primaryKey: true, type: DataType.UUID })
-  id!: string;
+  id?: string;
 
   @Column({ allowNull: true, type: DataType.DATE })
   createdAt?: Date;

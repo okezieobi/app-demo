@@ -9,7 +9,10 @@
       "outDir": "dist",
       "rootDir": "src",
       "experimentalDecorators": true,
-      "emitDecoratorMetadata": true
+      "emitDecoratorMetadata": true,
+      "rootDirs": ["src"],
+    "lib": ["es2020"],
+    "moduleResolution": "node"
     },
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "Recommended",
