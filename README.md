@@ -1,7 +1,9 @@
 # payment-api-graphql-demo
 
-## notes
+## Stack
+Typescript, Sequelize, PostgreSQL, Apollo Server
 
+## notes
  - Env sample included for project secrets
 
 ## Doc
